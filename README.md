@@ -1,0 +1,2 @@
+# PasswordRedEnvelopeTool
+特殊口令红包生成工具，可以生成安卓无法直接领取的QQ口令红包，以及辅助领取这类红包。

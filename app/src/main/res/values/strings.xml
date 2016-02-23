@@ -1,21 +1,25 @@
 <resources>
     <string name="app_name">特殊口令红包生成</string>
+    <string name="mode">增强模式</string>
     <string name="btn_get">获取收红包口令</string>
-    <string name="btn_send">生成
-        发红包口令</string>
+    <string name="btn_send">生成发红包口令</string>
     <string name="btn_show">显示剪贴板中内容（Debug Only)</string>
-    <string name="inputHint">输入要发的口令，1~15个字符</string>
+    <string name="inputHint">输入要发的口令，0~14个字符</string>
     <string name="sendOKTip">口令已复制到剪贴板，去发红包处粘贴吧</string>
-    <string name="sendErrorTip">请输入口令，1~15个字符</string>
-    <string name="getOKTip">口令已复制到剪贴板，去发消息处粘贴，【换行】再发送吧</string>
+    <string name="sendErrorTip">请输入口令，0~14个字符</string>
+    <string name="getNormalTip">没有发现特殊字符，直接发送吧</string>
+    <string name="getOnlyEndTip">口令已复制到剪贴板，去发消息处粘贴，【在末尾换行】再发送吧</string>
+    <string name="getOtherTip">口令已复制到剪贴板，去发消息处粘贴，\n
+        将写有【换成“换行”】的所有地方【删除并换成回车键】再发送吧</string>
     <string name="getErrorTip">剪切板内没有东西，请先复制</string>
     <string name="Tips">说明：\n
-        本工具用于生成一种安卓手机无法直接领取的口令红包，以及获取领取该类红包的真正口令。\n\n
+        本工具用于生成一种安卓手机无法直接领取的QQ口令红包，以及获取领取该类红包的真正口令。\n\n
         【发红包】：在本工具中输入需要发的口令内容，点击“获取收红包口令”，粘贴至QQ发口令红包处。\n\n
-        【收红包】：点击口令红包后，将QQ发消息框的内容全选剪切，到本软件直接点“获取发红包口令”,
-                然后返回QQ粘贴到发消息框，手动输入一个换行，再发送。\n
-                注意该工具并不能解决所有安卓无法领取的红包。\n
-                原理来源于网络。
+        【收红包】：点击口令红包后，将QQ发消息框的内容全选剪切，到本软件直接点“获取发红包口令”，
+                然后返回QQ粘贴到发消息框，按提示处理(比如【在末尾换行】)再发送。
+        注意该工具并不能解决所有安卓无法领取的红包。\n\n
+        【增强模式】：除末尾外，在随机位置再产生一个特殊字符，领取稍麻烦一点，但可以让一些领取工具失效。\n\n
+        源码：https://github.com/hnshhslsh/PasswordRedEnvelopeTool
     </string>
 
 </resources>

@@ -5,16 +5,22 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
-    TextView textView;
-    EditText editText;
-    ClipboardManager clipboardManager;
+    private TextView textView;
+    private EditText editText;
+    private ClipboardManager clipboardManager;
+    private CheckBox checkBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +29,12 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.txt);
         editText = (EditText) findViewById(R.id.editText);
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
+        textView.setAutoLinkMask(Linkify.ALL);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    /*
+/*
     private void show(){
         if (clipboardManager.hasPrimaryClip()) {
             String out = new String();
@@ -40,29 +49,67 @@ public class MainActivity extends AppCompatActivity {
     public void click(View view) {
         show();
     }
-    */
+*/
 
     public void sendingPassword(View view) {
         String input = editText.getText().toString();
-        if(input.length() > 0 && input.length() < 16) {
-            input = "\24" + input + "\24\12\0\12";
+        if(input.length() >= 0 && input.length() <= 14) {
+            if(checkBox.isChecked()){
+                Random random = new Random();
+                int index = input.length() == 0 ? 0 : random.nextInt(input.length());
+                input = input.substring(0,index) + "\24\12" + input.substring(index) + "\24\12";
+            } else {
+                input = input + "\24\12";
+            }
             clipboardManager.setPrimaryClip(ClipData.newPlainText(null, input));
             editText.setText("");
             //show();
-            Toast.makeText(MainActivity.this,R.string.sendOKTip, Toast.LENGTH_SHORT).show();
+            Util.openPackage(this.getApplicationContext(), "com.tencent.mobileqq");
+            Toast.makeText(MainActivity.this,R.string.sendOKTip, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(MainActivity.this,R.string.sendErrorTip, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void gettingPassword(View view) {
+         final int NORMAL = 0;
+        final int ONLY_END = 1;
+        final int OTHER = 2;
         if (clipboardManager.hasPrimaryClip()) {
             String input = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
             if(input.length() != 0){
-                input = input.substring(0, input.length() - 1);
-                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, input));
+                int cnt = 0;
+                int type = NORMAL;
+                String out = new String();
+                for(int i = 0;i < input.length() - 1;++i){
+                    if(input.charAt(i) == '\372'){
+                        out += "【换成“换行”】";
+                        type = OTHER;
+                    } else {
+                        out += input.charAt(i);
+                    }
+                }
+                if(input.charAt(input.length() - 1) == '\372'){
+                    if(type == NORMAL){
+                        type = ONLY_END;
+                    } else {
+                        out += "【换成“换行”】";
+                    }
+                }
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, out));
                 //show();
-                Toast.makeText(MainActivity.this, R.string.getOKTip, Toast.LENGTH_SHORT).show();
+                Util.openPackage(this.getApplicationContext(), "com.tencent.mobileqq");
+                switch (type){
+                    case NORMAL:
+                        Toast.makeText(MainActivity.this, R.string.getNormalTip, Toast.LENGTH_LONG).show();
+                        break;
+                    case ONLY_END:
+                        Toast.makeText(MainActivity.this, R.string.getOnlyEndTip, Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this, R.string.getOtherTip, Toast.LENGTH_LONG).show();
+                        break;
+                }
             } else {
                 Toast.makeText(MainActivity.this, R.string.getErrorTip, Toast.LENGTH_SHORT).show();
             }
@@ -70,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, R.string.getErrorTip, Toast.LENGTH_SHORT).show();
         }
 
-
     }
+
+
+
 }
